@@ -1,3 +1,5 @@
+//! Initialization functions for setting up the editor
+
 use std::io;
 use std::io::Stdout;
 use crossterm::terminal::{
@@ -9,7 +11,7 @@ use crossterm::event::EnableMouseCapture;
 use crate::util::buffer::Buffer;
 use crate::util::gui::GuiSettings;
 
-/// Initializes crossterm, enabling raw mode, entering alternate screen, and enabling the mouse.
+/// Sets up terminal: raw mode, alternate screen, mouse capture
 fn init_crossterm(mut stdout: Stdout) {
     match enable_raw_mode() {
         Ok(_) => (),
@@ -25,17 +27,21 @@ fn init_crossterm(mut stdout: Stdout) {
     }
 }
 
-/// Initializes the buffer, reads from the file or leaves it empty
+/// Load file into buffer (currently just adds placeholder text)
 fn init_buffer(buffer: &mut Buffer, filename : &str) {
+    buffer.file = String::from(filename);
     buffer.buffer.push(String::from("Hello, world!"));
+    buffer.buffer.push(String::from("This is a test file."));
+    buffer.buffer.push(String::from("It contains some placeholder text."));
     // TODO: read from filename in pwd
 }
 
-fn init_gui(gui_settings: &mut GuiSettings) {
+/// Set up GUI customizations (currently does nothing)
+fn init_gui(_gui_settings: &mut GuiSettings) {
     // TODO: make the GUI customizable
 }
 
-/// Initializes everything, including crossterm, the buffer, and the GUI
+/// Main init function: sets up terminal, buffer, and GUI
 pub fn init(buffer: &mut Buffer, gui_settings: &mut GuiSettings, filename : &str) {
     init_crossterm(io::stdout());
     init_buffer(buffer, filename);
