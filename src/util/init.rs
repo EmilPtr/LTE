@@ -1,3 +1,4 @@
+use std::io;
 use std::io::Stdout;
 use crossterm::terminal::{
     enable_raw_mode,
@@ -6,7 +7,7 @@ use crossterm::terminal::{
 use crossterm::execute;
 use crossterm::event::EnableMouseCapture;
 use crate::util::buffer::Buffer;
-use crate::util::gui_settings::GuiSettings;
+use crate::util::gui::GuiSettings;
 
 /// Initializes crossterm, enabling raw mode, entering alternate screen, and enabling the mouse.
 fn init_crossterm(mut stdout: Stdout) {
@@ -35,8 +36,8 @@ fn init_gui(gui_settings: &mut GuiSettings) {
 }
 
 /// Initializes everything, including crossterm, the buffer, and the GUI
-pub fn init(stdout: Stdout, buffer: &mut Buffer, gui_settings: &mut GuiSettings, filename : &str) {
-    init_crossterm(stdout);
+pub fn init(buffer: &mut Buffer, gui_settings: &mut GuiSettings, filename : &str) {
+    init_crossterm(io::stdout());
     init_buffer(buffer, filename);
     init_gui(gui_settings);
 }
