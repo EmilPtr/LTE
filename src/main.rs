@@ -5,6 +5,7 @@ mod util;
 
 use std::io;
 use std::env::args;
+use std::io::Write;
 use std::thread::sleep;
 use std::time::Duration;
 use crossterm::event::DisableMouseCapture;
@@ -13,7 +14,7 @@ use crossterm::style::Color;
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
 use crate::util::buffer::Buffer;
 use crate::util::init::init;
-use crate::util::gui::{draw_gui, GuiSettings};
+use crate::util::gui::{draw_buffer, draw_gui, GuiSettings};
 
 /// Main function: parses args, sets up buffer and GUI, runs editor loop
 fn main() {
@@ -40,7 +41,8 @@ fn main() {
         title_background_color:     Color::Rgb { r: 255, g: 255, b: 255},
         text_color:                 Color::Rgb { r: 255, g: 255, b: 255},
         highlight_text_color:       Color::Rgb { r: 0,   g: 0,   b: 0},
-        highlight_background_color: Color::Rgb { r: 255, g: 255, b: 255}
+        highlight_background_color: Color::Rgb { r: 255, g: 255, b: 255},
+        line_number_color:          Color::Rgb { r: 192, g: 192, b: 192}       
     };
 
     // Initialize terminal and load file
@@ -49,6 +51,8 @@ fn main() {
     // Main rendering loop
     for _ in 0..500 {
         draw_gui(&gui_settings, &buffer);
+        draw_buffer(&gui_settings, &buffer);
+        io::stdout().flush().unwrap();
         sleep(Duration::from_millis(10));
     }
 

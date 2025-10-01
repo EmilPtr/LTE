@@ -1,7 +1,6 @@
 //! GUI rendering for the terminal interface
 
 use std::io;
-use std::io::Write;
 use crossterm::cursor::MoveTo;
 use crossterm::{ExecutableCommand, QueueableCommand};
 use crossterm::style::{Attribute, Color, Print, SetBackgroundColor, SetForegroundColor};
@@ -15,6 +14,7 @@ pub struct GuiSettings {
     pub text_color:                 Color,
     pub highlight_text_color:       Color,
     pub highlight_background_color: Color,
+    pub line_number_color:          Color,
 }
 
 /// Draw the GUI (currently just title bar)
@@ -26,8 +26,22 @@ pub fn draw_gui(settings: &GuiSettings, buffer: &Buffer) {
     stdout.queue(Print(title_string(buffer.file.clone()))).unwrap();
     stdout.queue(MoveTo(0, size().unwrap().1-1)).unwrap();
     stdout.queue(Print(footer())).unwrap();
-    // Flush all queued commands to make them visible
-    stdout.flush().unwrap();
+}
+
+pub fn draw_buffer(settings: &GuiSettings, buffer: &Buffer) {
+    let mut stdout = io::stdout();
+    stdout.queue(SetBackgroundColor(Color::Reset)).unwrap();
+    stdout.queue(SetForegroundColor(settings.text_color)).unwrap();
+    stdout.queue(MoveTo(0, 1)).unwrap();
+    let mut line_number = 1;
+    for line in buffer.buffer.iter() {
+        stdout.queue(SetForegroundColor(settings.line_number_color)).unwrap();
+        stdout.queue(MoveTo(0, line_number)).unwrap();
+        stdout.queue(Print(format!("{:3} ┃ ", line_number))).unwrap();
+        stdout.queue(SetForegroundColor(settings.text_color)).unwrap();
+        stdout.queue(Print(line)).unwrap();
+        line_number += 1;
+    }
 }
 
 /// Clear the terminal screen
