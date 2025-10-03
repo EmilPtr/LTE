@@ -13,8 +13,9 @@ use crossterm::execute;
 use crossterm::style::Color;
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
 use crate::util::buffer::Buffer;
+use crate::util::cursor::Cursor;
 use crate::util::init::init;
-use crate::util::gui::{draw_buffer, draw_gui, GuiSettings};
+use crate::util::gui::{draw_buffer, draw_gui, GuiSettings, LINE_NUMBER_WIDTH, TITLE_BAR_HEIGHT};
 
 /// Main function: parses args, sets up buffer and GUI, runs editor loop
 fn main() {
@@ -36,13 +37,20 @@ fn main() {
         file: String::new()
     };
 
+    let mut cursor = Cursor {
+        x: 0,
+        y: 0,
+        real_x: 0+LINE_NUMBER_WIDTH,
+        real_y: 0+TITLE_BAR_HEIGHT
+    };
+
     let mut gui_settings = GuiSettings {
-        title_color:                Color::Rgb { r: 0,   g: 0,   b: 0},
-        title_background_color:     Color::Rgb { r: 255, g: 255, b: 255},
-        text_color:                 Color::Rgb { r: 255, g: 255, b: 255},
-        highlight_text_color:       Color::Rgb { r: 0,   g: 0,   b: 0},
-        highlight_background_color: Color::Rgb { r: 255, g: 255, b: 255},
-        line_number_color:          Color::Rgb { r: 192, g: 192, b: 192}       
+        title_color:                Color::Rgb { r: 0,   g: 0,   b: 0   },
+        title_background_color:     Color::Rgb { r: 255, g: 255, b: 255 },
+        text_color:                 Color::Rgb { r: 255, g: 255, b: 255 },
+        highlight_text_color:       Color::Rgb { r: 0,   g: 0,   b: 0   },
+        highlight_background_color: Color::Rgb { r: 255, g: 255, b: 255 },
+        line_number_color:          Color::Rgb { r: 192, g: 192, b: 192 }
     };
 
     // Initialize terminal and load file

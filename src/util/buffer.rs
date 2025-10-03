@@ -5,3 +5,4 @@ pub struct Buffer {
     pub buffer: Vec<String>,  // Each string is one line
     pub file: String          // Filename
 }
+
