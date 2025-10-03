@@ -32,10 +32,13 @@ fn handle_keypress(key: KeyCode, c: &mut Cursor, b: &mut Buffer) {
     match key {
         KeyCode::Up => {
             c.move_u();
+            c.clamp_x(b.buffer[c.y as usize].len() as u16);
             stdout.queue(MoveTo(c.real_x, c.real_y)).unwrap();
         },
         KeyCode::Down => {
             c.move_d();
+            c.clamp_y(b.buffer.len() as u16);
+            c.clamp_x(b.buffer[c.y as usize].len() as u16);
             stdout.queue(MoveTo(c.real_x, c.real_y)).unwrap();
         },
         KeyCode::Left => {
@@ -44,6 +47,7 @@ fn handle_keypress(key: KeyCode, c: &mut Cursor, b: &mut Buffer) {
         },
         KeyCode::Right => {
             c.move_r();
+            c.clamp_x(b.buffer[c.y as usize].len() as u16);
             stdout.queue(MoveTo(c.real_x, c.real_y)).unwrap();
         },
         _ => {

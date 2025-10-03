@@ -9,7 +9,8 @@ use std::io::Write;
 use std::thread::sleep;
 use std::time::Duration;
 use crossterm::event::{read, DisableMouseCapture};
-use crossterm::execute;
+use crossterm::{execute, queue};
+use crossterm::cursor::MoveTo;
 use crossterm::style::Color;
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
 use crate::util::buffer::{handle_event, Buffer};
@@ -55,9 +56,13 @@ fn main() {
 
     // Initialize terminal and load file
     init(&mut buffer, &mut gui_settings, filename.as_str());
+    draw_gui(&gui_settings, &buffer);
+    draw_buffer(&gui_settings, &buffer);
+    queue!(io::stdout(), MoveTo(cursor.real_x, cursor.real_y)).unwrap();
+    io::stdout().flush().unwrap();
 
-    // Main rendering loop
-    for _ in 0..500 {
+    // Main event loop
+    for _ in 0..100 {
         draw_gui(&gui_settings, &buffer);
         draw_buffer(&gui_settings, &buffer);
         let event = read().unwrap();
