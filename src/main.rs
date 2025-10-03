@@ -8,11 +8,11 @@ use std::env::args;
 use std::io::Write;
 use std::thread::sleep;
 use std::time::Duration;
-use crossterm::event::DisableMouseCapture;
+use crossterm::event::{read, DisableMouseCapture};
 use crossterm::execute;
 use crossterm::style::Color;
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
-use crate::util::buffer::Buffer;
+use crate::util::buffer::{handle_event, Buffer};
 use crate::util::cursor::Cursor;
 use crate::util::init::init;
 use crate::util::gui::{draw_buffer, draw_gui, GuiSettings, LINE_NUMBER_WIDTH, TITLE_BAR_HEIGHT};
@@ -60,6 +60,8 @@ fn main() {
     for _ in 0..500 {
         draw_gui(&gui_settings, &buffer);
         draw_buffer(&gui_settings, &buffer);
+        let event = read().unwrap();
+        handle_event(event, &mut cursor, &mut buffer);
         io::stdout().flush().unwrap();
         sleep(Duration::from_millis(10));
     }

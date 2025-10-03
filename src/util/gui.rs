@@ -66,5 +66,5 @@ fn title_string(file: String) -> String {
 }
 
 fn footer() -> String {
-    String::from("CTRL+C: Copy    CTRL+V: Paste    CTRL+S: Save    CTRL+X: Exit")
+    String::from("CTRL+C: Copy    CTRL+Shift+V: Paste    CTRL+S: Save    CTRL+X: Exit")
 }
