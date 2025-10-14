@@ -13,10 +13,10 @@ use crossterm::{execute, queue};
 use crossterm::cursor::MoveTo;
 use crossterm::style::Color;
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
-use crate::util::buffer::{handle_event, Buffer};
+use crate::util::buffer::{handle_event, move_cursor, Buffer};
 use crate::util::cursor::Cursor;
 use crate::util::init::init;
-use crate::util::gui::{draw_buffer, draw_gui, GuiSettings, LINE_NUMBER_WIDTH, TITLE_BAR_HEIGHT};
+use crate::util::gui::{clear, draw_buffer, draw_gui, GuiSettings, LINE_NUMBER_WIDTH, TITLE_BAR_HEIGHT};
 
 /// Main function: parses args, sets up buffer and GUI, runs editor loop
 fn main() {
@@ -62,13 +62,14 @@ fn main() {
     io::stdout().flush().unwrap();
 
     // Main event loop
-    for _ in 0..100 {
-        draw_gui(&gui_settings, &buffer);
-        draw_buffer(&gui_settings, &buffer);
+    for _ in 0..50 {
         let event = read().unwrap();
         handle_event(event, &mut cursor, &mut buffer);
+        clear();
+        draw_gui(&gui_settings, &buffer);
+        draw_buffer(&gui_settings, &buffer);
+        move_cursor(&cursor);
         io::stdout().flush().unwrap();
-        sleep(Duration::from_millis(10));
     }
 
     // Cleanup terminal

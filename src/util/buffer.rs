@@ -27,6 +27,10 @@ pub fn handle_event(event: Event, cursor: &mut Cursor , buffer: &mut Buffer) {
     }
 }
 
+pub fn move_cursor(c: &Cursor) {
+    std::io::stdout().queue(MoveTo(c.real_x, c.real_y)).unwrap();
+}
+
 fn handle_keypress(key: KeyCode, c: &mut Cursor, b: &mut Buffer) {
     let mut stdout = std::io::stdout();
     match key {
@@ -37,7 +41,7 @@ fn handle_keypress(key: KeyCode, c: &mut Cursor, b: &mut Buffer) {
         },
         KeyCode::Down => {
             c.move_d();
-            c.clamp_y(b.buffer.len() as u16);
+            c.clamp_y((b.buffer.len()-1) as u16);
             c.clamp_x(b.buffer[c.y as usize].len() as u16);
             stdout.queue(MoveTo(c.real_x, c.real_y)).unwrap();
         },
@@ -50,6 +54,12 @@ fn handle_keypress(key: KeyCode, c: &mut Cursor, b: &mut Buffer) {
             c.clamp_x(b.buffer[c.y as usize].len() as u16);
             stdout.queue(MoveTo(c.real_x, c.real_y)).unwrap();
         },
+        KeyCode::Backspace => {
+            b.buffer[c.y as usize].remove(c.x as usize - 1);
+            c.move_l();
+            stdout.queue(MoveTo(c.real_x, c.real_y)).unwrap();
+            stdout.queue(MoveTo(c.real_x, c.real_y)).unwrap();
+        }
         _ => {
             stdout.queue(MoveTo(c.real_x, c.real_y)).unwrap();
         }
