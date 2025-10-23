@@ -58,7 +58,7 @@ fn main() {
     init(&mut buffer, &mut gui_settings, filename.as_str());
     draw_gui(&gui_settings, &buffer);
     draw_buffer(&gui_settings, &buffer);
-    queue!(io::stdout(), MoveTo(cursor.real_x, cursor.real_y)).unwrap();
+    queue!(io::stdout(), MoveTo(cursor.real_x as u16, cursor.real_y as u16)).unwrap();
     io::stdout().flush().unwrap();
 
     // Main event loop

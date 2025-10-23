@@ -1,14 +1,14 @@
 use crate::util::gui::{LINE_NUMBER_WIDTH, TITLE_BAR_HEIGHT};
 
 pub struct Cursor {
-    pub x: u16,
-    pub y: u16,
-    pub real_x: u16,
-    pub real_y: u16,
+    pub x: usize,
+    pub y: usize,
+    pub real_x: usize,
+    pub real_y: usize,
 }
 
 impl Cursor {
-    pub fn set_position(&mut self, x: u16, y: u16) {
+    pub fn set_position(&mut self, x: usize, y: usize) {
         self.x = x;
         self.y = y;
         self.real_x = x+LINE_NUMBER_WIDTH;
@@ -35,14 +35,14 @@ impl Cursor {
         self.set_position(self.x, self.y);
     }
 
-    pub fn clamp_x(&mut self, max: u16) {
+    pub fn clamp_x(&mut self, max: usize) {
         if self.x > max {
             self.x = max;
             self.set_position(self.x, self.y);
         }
     }
 
-    pub fn clamp_y(&mut self, max: u16) {
+    pub fn clamp_y(&mut self, max: usize) {
         if self.y > max {
             self.y = max;
             self.set_position(self.x, self.y);

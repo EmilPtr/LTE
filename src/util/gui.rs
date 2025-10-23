@@ -17,8 +17,8 @@ pub struct GuiSettings {
     pub line_number_color:          Color,
 }
 
-pub const TITLE_BAR_HEIGHT: u16 = 1;
-pub const LINE_NUMBER_WIDTH: u16 = 6;
+pub const TITLE_BAR_HEIGHT: usize = 1;
+pub const LINE_NUMBER_WIDTH: usize = 6;
 
 /// Draw the GUI (currently just title bar)
 pub fn draw_gui(settings: &GuiSettings, buffer: &Buffer) {

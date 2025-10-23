@@ -32,6 +32,7 @@ fn init_buffer(buffer: &mut Buffer, filename : &str) {
     buffer.file = String::from(filename);
     buffer.buffer.push(String::from("Hello, world!"));
     buffer.buffer.push(String::from("This is a test file."));
+    buffer.buffer.push(String::from(""));
     buffer.buffer.push(String::from("It contains some placeholder text."));
     // TODO: read from filename in pwd
 }
