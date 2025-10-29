@@ -1,3 +1,5 @@
+use crossterm::cursor::MoveTo;
+use crossterm::QueueableCommand;
 use crate::util::gui::{LINE_NUMBER_WIDTH, TITLE_BAR_HEIGHT};
 
 pub struct Cursor {
@@ -47,5 +49,9 @@ impl Cursor {
             self.y = max;
             self.set_position(self.x, self.y);
         }
+    }
+    
+    pub fn move_cursor(&self) {
+        std::io::stdout().queue(MoveTo(self.real_x as u16, self.real_y as u16)).unwrap();
     }
 }

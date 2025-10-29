@@ -1,6 +1,7 @@
 //! Utility modules for LTE
 
 pub mod init;
-pub mod buffer;
+pub mod event_handler;
 pub mod gui;
 pub mod cursor;
+pub(crate) mod buffer;
