@@ -2,8 +2,7 @@
 
 use std::io;
 use std::process::exit;
-use crossterm::cursor::MoveTo;
-use crossterm::event::{read, DisableMouseCapture, Event, KeyCode, KeyEvent, KeyModifiers};
+use crossterm::event::{DisableMouseCapture, Event, KeyCode, KeyEvent, KeyModifiers};
 use crossterm::{execute, QueueableCommand};
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
 use crate::util::buffer::Buffer;
