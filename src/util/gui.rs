@@ -27,7 +27,7 @@ pub fn draw_gui(settings: &GuiSettings, buffer: &Buffer) {
     stdout.queue(SetBackgroundColor(settings.title_background_color)).unwrap();
     stdout.queue(SetForegroundColor(settings.title_color)).unwrap();
     stdout.queue(Print(title_string(buffer.file.clone()))).unwrap();
-    stdout.queue(MoveTo(0, size().unwrap().1-1)).unwrap();
+    stdout.queue(MoveTo(0, size().unwrap().1-2)).unwrap();
     stdout.queue(Print(footer())).unwrap();
 }
 

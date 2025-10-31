@@ -9,6 +9,7 @@ use crossterm::terminal::{
 use crossterm::execute;
 use crossterm::event::EnableMouseCapture;
 use crate::util::buffer::Buffer;
+use crate::util::file_operations::load_file;
 use crate::util::gui::GuiSettings;
 
 /// Sets up terminal: raw mode, alternate screen, mouse capture
@@ -28,13 +29,9 @@ fn init_crossterm(mut stdout: Stdout) {
 }
 
 /// Load file into buffer (currently just adds placeholder text)
-fn init_buffer(buffer: &mut Buffer, filename : &str) {
-    buffer.file = String::from(filename);
-    buffer.buffer.push(String::from("Hello, world!"));
-    buffer.buffer.push(String::from("This is a test file."));
-    buffer.buffer.push(String::from(""));
-    buffer.buffer.push(String::from("It contains some placeholder text."));
-    // TODO: read from filename in pwd
+fn init_buffer(buffer: &mut Buffer, path : &str) {
+    buffer.file = String::from(path);
+    load_file(path, buffer);
 }
 
 /// Set up GUI customizations (currently does nothing)
