@@ -7,8 +7,9 @@ use crossterm::{execute, QueueableCommand};
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
 use crate::util::buffer::Buffer;
 use crate::util::cursor::Cursor;
+use crate::util::file_operations::save_file;
 
-pub fn handle_event(event: Event, cursor: &mut Cursor , buffer: &mut Buffer) {
+pub fn handle_event(event: Event, cursor: &mut Cursor, buffer: &mut Buffer) {
     match event {
         Event::Key(key_event) => {
             handle_keypress(key_event, cursor, buffer);
@@ -48,7 +49,7 @@ fn handle_keypress(key_event: KeyEvent, c: &mut Cursor, b: &mut Buffer) {
         (KeyCode::Enter, KeyModifiers::NONE) => {
             b.handle_enter(c);
         },
-        (KeyCode::Char(char), KeyModifiers::NONE) => {
+        (KeyCode::Char(char), KeyModifiers::NONE | KeyModifiers::SHIFT) => {
             b.handle_char_insert(c, char);
         },
         (KeyCode::Char(char), KeyModifiers::CONTROL) => {
@@ -57,6 +58,8 @@ fn handle_keypress(key_event: KeyEvent, c: &mut Cursor, b: &mut Buffer) {
                 execute!(io::stdout(), LeaveAlternateScreen).unwrap();
                 execute!(io::stdout(), DisableMouseCapture).unwrap();
                 exit(0);
+            } else if char.to_ascii_lowercase() == 's' {
+                save_file(&b.file.clone(), b);
             }
         },
         _ => {
